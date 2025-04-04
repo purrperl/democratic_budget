@@ -1,20 +1,33 @@
-let legendData = [
-    { label: 'Housing', percentage: 20 },
-    { label: 'Healthcare', percentage: 15 },
-    { label: 'Education', percentage: 25 },
-    { label: 'Technology', percentage: 10 },
-    { label: 'Public Works', percentage: 30 }
-];
+let legendData: { label: string, percentage: number }[] = [];
 
-export function setupLegend() {
+export function setupLegend(data: { label: string, percentage: number }[]) {
+    legendData = data;
     const legendContainer = document.getElementById('legend-container');
     if (legendContainer) {
-        legendData.forEach((item) => {
+        legendData.forEach((item, index) => {
             const legendItem = document.createElement('div');
-            legendItem.textContent = `${item.label}: ${item.percentage}%`;
+            legendItem.classList.add('legend-item');
+            legendItem.innerHTML = `
+                <span>${item.label}: </span>
+                <input type="number" value="${item.percentage}" data-index="${index}">%
+            `;
             legendContainer.appendChild(legendItem);
         });
     }
+
+    const inputs = document.querySelectorAll('#legend-container input');
+    inputs.forEach(input => {
+        input.addEventListener('change', (e: Event) => {
+            const target = e.target as HTMLInputElement;
+            const index = parseInt(target.dataset.index || '0');
+            const value = parseFloat(target.value);
+            legendData[index].percentage = value;
+        });
+    });
+}
+
+export function getLegendData() {
+    return legendData;
 }
 
 export function updateLegend(data: { label: string, percentage: number }[]) {

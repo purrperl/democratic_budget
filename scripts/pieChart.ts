@@ -1,26 +1,21 @@
 import p5 from 'p5';
 
-let pieChartData = [
-    { label: 'Housing', percentage: 20 },
-    { label: 'Healthcare', percentage: 15 },
-    { label: 'Education', percentage: 25 },
-    { label: 'Technology', percentage: 10 },
-    { label: 'Public Works', percentage: 30 }
-];
+let pieChartData: { label: string, percentage: number }[] = [];
 
-export function setupPieChart() {
+export function setupPieChart(data: { label: string, percentage: number }[]) {
+    pieChartData = data;
     new p5((p: p5) => {
         p.setup = function() {
             const canvas = p.createCanvas(600, 400);
             canvas.parent('pie-chart-container');
-            drawPieChart(p, pieChartData);
+            drawPieChart(p);
         };
     });
 }
 
-function drawPieChart(p: p5, data: { label: string, percentage: number }[]) {
+function drawPieChart(p: p5) {
     let lastAngle = 0;
-    data.forEach((sector) => {
+    pieChartData.forEach((sector) => {
         let angle = p.radians((sector.percentage / 100) * 360);
         p.fill(p.random(255), p.random(255), p.random(255));
         p.arc(300, 200, 300, 300, lastAngle, lastAngle + angle, p.PIE);
@@ -29,7 +24,11 @@ function drawPieChart(p: p5, data: { label: string, percentage: number }[]) {
 }
 
 export function updatePieChart(data: { label: string, percentage: number }[]) {
-    // Update pie chart with new data
+    pieChartData = data;
+    new p5((p: p5) => {
+        p.clear();
+        drawPieChart(p);
+    });
 }
 
 export function drillDownPieChart(department: string) {
