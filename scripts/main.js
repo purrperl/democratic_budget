@@ -1,5 +1,5 @@
-import { setupPieChart, updatePieChart, drillDownPieChart } from './pieChart';
-import { setupLegend, updateLegend, getLegendData } from './legend';
+import { setupPieChart, updatePieChart, drillDownPieChart } from './pieChart.js';
+import { setupLegend, updateLegend, getLegendData } from './legend.js';
 
 window.setup = function() {
     const initialData = [
